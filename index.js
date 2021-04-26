@@ -3,6 +3,11 @@ const express = require('express',);
 
 const app = express();
 
+const router = express.Router({
+    caseSensitive: true
+});
+app.use(router);
+
 app.use(express.json());
 // app.use(express.raw());
 // app.use(express.text());
@@ -15,6 +20,11 @@ app.use(express.static(`${__dirname}/public/`, {
 app.get('/', (req, res) => {
     // console.log( typeof req.body);
     res.send('Hello Sourav');
+});
+
+router.get('/about', (req, res) => {
+    // console.log( typeof req.body);
+    res.send('About Page');
 });
 
 app.post('/', (req, res) => {
