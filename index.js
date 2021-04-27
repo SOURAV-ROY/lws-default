@@ -4,13 +4,15 @@ const express = require('express',);
 const app = express();
 // const admin = express();
 
+app.set('view engine', 'ejs');
+
 // admin.on('mount', function (parent) {
 //     console.log('Admin Mounted')
 //     console.log(parent) // refers to the parent app
 // })
 app.route('/api/v1/first')
     .get((req, res) => {
-        res.send('Hello Home');
+        res.render('pages/first');
     })
     .post((req, res) => {
         res.send('Hello Post');
