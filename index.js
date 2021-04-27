@@ -47,6 +47,20 @@ app.get('/', (req, res) => {
     res.send('Hello Sourav');
 });
 
+app.param('id', (req, res, next, id) => {
+    const user = {
+        userId: id,
+        userName: 'Bangladesh',
+    };
+    req.userDetails = user;
+    next();
+});
+
+app.get('/user/:id', (req, res) => {
+    console.log(req.userDetails);
+    res.send('Single User Route');
+});
+
 router.get('/about', (req, res) => {
     // console.log( typeof req.body);
     res.send('About Page');
