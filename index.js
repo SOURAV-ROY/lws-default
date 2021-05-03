@@ -1,5 +1,32 @@
 const express = require('express',);
-// const dotenv = require('dotenv');
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+//Dot ENV Use Here
+dotenv.config();
+// *****************************************************************************
+let begin = 0;
+
+function log(msg) {
+    if (!begin) {
+        begin = Date.now();
+    }
+    let t = ((Date.now() - begin) / 1000).toFixed(5);
+    console.log("" + t + ": " + msg);
+}
+
+log('start program');
+
+setTimeout(() => log('timer'), 10);
+setImmediate(() => log('immediate'));
+fs.readFile(__filename, () => log('read file'));
+
+const now = Date.now();
+log('start loop');
+while (Date.now() - now < 1000) {
+}
+log('done loop');
+// *****************************************************************************
 
 const app = express();
 // const admin = express();
@@ -111,7 +138,7 @@ app.route('/api/v1/first')
 });
  */
 
-let PORT = process.env.PORT || 2021;
+let PORT = process.env.PORT || 2022;
 app.listen(PORT, () => {
     console.log(`Server Listening on ${PORT}`);
 });
