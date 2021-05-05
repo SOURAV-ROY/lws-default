@@ -2,6 +2,8 @@ const express = require('express',);
 const fs = require('fs');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const adminHandler = require("./adminHandler/adminHandler");
+const userHandler = require("./userHandler/userHandler");
 
 //Dot ENV Use Here
 dotenv.config();
@@ -61,37 +63,9 @@ app.route('/api/v1/first')
 //Admin Route *********************************
 app.use('/admin', adminRoute);
 
-adminRoute.get('/dashboard', (req, res) => {
-    console.log(req.baseUrl);
-    console.log(req.originalUrl);
-    console.log(req.url);
-    console.log(req.path);
-    console.log(req.hostname);
-    console.log(req.ip);
-    console.log(req.method);
-    console.log(req.protocol);
-    console.log(req.params);
-    console.log(req.secure);
-    res.send('This is admin dash dashboard url');
-});
+adminRoute.get('/dashboard', adminHandler);
 
-app.get('/user/:id', (req, res) => {
-    console.log(req.baseUrl);
-    console.log(req.originalUrl);
-    console.log(req.url);
-    console.log(req.path);
-    console.log(req.hostname);
-    console.log(req.ip);
-    console.log(req.method);
-    console.log(req.protocol);
-    console.log(req.params);
-    console.log(req.params.id);
-    console.log(req.query);
-    console.log(req.cookies);
-    console.log('No Signed Cookie Here : ' , req.signedCookies);
-    console.log(req.secure);
-    res.send('User GET Here');
-});
+app.get('/user/:id', userHandler);
 
 app.post('/user', (req, res) => {
     console.log(req.body);
