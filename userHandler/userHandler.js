@@ -14,7 +14,16 @@ const userHandler = (req, res) => {
     console.log('No Signed Cookie Here : ', req.signedCookies);
     console.log(req.secure);
     console.log(req.app.get('view engine'));
-    console.log(req.route);
+    // console.log(req.route);
+    console.log('Only accept json Data', req.accepts('json').rainbow.bold);
+    console.log('Only accept json Data', req.accepts('json').random.bold);
+    console.log('Only accept json Data', req.accepts('html'));
+
+    if (req.accepts('html')) {
+        res.render();
+    } else {
+        console.log('No Accept Here!!')
+    }
 
     res.send('User GET Here');
 };

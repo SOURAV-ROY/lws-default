@@ -1,5 +1,6 @@
 const express = require('express',);
 const fs = require('fs');
+require('colors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const adminHandler = require("./adminHandler/adminHandler");
