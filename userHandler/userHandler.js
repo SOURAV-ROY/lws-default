@@ -13,6 +13,9 @@ const userHandler = (req, res) => {
     console.log(req.cookies);
     console.log('No Signed Cookie Here : ', req.signedCookies);
     console.log(req.secure);
+    console.log(req.app.get('view engine'));
+    console.log(req.route);
+
     res.send('User GET Here');
 };
 
