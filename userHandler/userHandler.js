@@ -15,6 +15,8 @@ const userHandler = (req, res) => {
     console.log(req.secure);
     console.log(req.app.get('view engine'));
     // console.log(req.route);
+
+    //req.accepts() method use here ********************************************
     console.log('Only accept json Data', req.accepts('json').rainbow.bold);
     console.log('Only accept json Data', req.accepts('json').random.bold);
     console.log('Only accept json Data', req.accepts('html'));
@@ -24,6 +26,12 @@ const userHandler = (req, res) => {
     } else {
         console.log('No Accept Here!!')
     }
+
+    //req.get() method use here **********************************************
+    console.log(req.get('Accept').bgGreen.bold);
+
+    //As like Params ******************************************************
+    console.log(req.param('filter').blue.bold);
 
     res.send('User GET Here');
 };
