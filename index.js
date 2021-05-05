@@ -5,10 +5,11 @@ const dotenv = require('dotenv');
 //Dot ENV Use Here
 dotenv.config();
 
-// *****************************************************************************
-let begin = 0;
+/**
+ // *****************************************************************************
+ let begin = 0;
 
-function log(msg) {
+ function log(msg) {
     if (!begin) {
         begin = Date.now();
     }
@@ -16,21 +17,22 @@ function log(msg) {
     console.log("" + t + ": " + msg);
 }
 
-log('start program');
+ log('start program');
 
-setTimeout(() => log('timer'), 10);
-setImmediate(() => log('immediate'));
-fs.readFile(__filename, () => log('read file'));
+ setTimeout(() => log('timer'), 10);
+ setImmediate(() => log('immediate'));
+ fs.readFile(__filename, () => log('read file'));
 
-const now = Date.now();
-log('start loop');
-while (Date.now() - now < 1000) {
+ const now = Date.now();
+ log('start loop');
+ while (Date.now() - now < 1000) {
 }
-log('done loop');
-// *****************************************************************************
+ log('done loop');
+ // *****************************************************************************
+ */
 
 const app = express();
-// const admin = express();
+const adminRoute = express();
 
 app.set('view engine', 'ejs');
 
@@ -52,9 +54,19 @@ app.route('/api/v1/first')
         res.send('Hello Delete');
     })
 
-// app.get('/', (req, res) => {
-//     res.send('Hello Home');
-// });
+//Admin Route *********************************
+app.use('/admin', adminRoute);
+
+adminRoute.get('/dashboard', (req, res) => {
+    console.log(req.baseUrl);
+    res.send('This is admin dash dashboard url');
+});
+
+app.get('/user/:id', (req, res) => {
+    console.log(req.baseUrl);
+    res.send('User GET Here');
+});
+
 // app.post('/', (req, res) => {
 //     res.send('Hello Post Page');
 // });
