@@ -1,6 +1,7 @@
 const express = require('express',);
 const fs = require('fs');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 //Dot ENV Use Here
 dotenv.config();
@@ -34,6 +35,9 @@ dotenv.config();
 const app = express();
 const adminRoute = express();
 
+app.use(express.json());
+app.use(cookieParser());
+
 app.set('view engine', 'ejs');
 
 // admin.on('mount', function (parent) {
@@ -59,12 +63,39 @@ app.use('/admin', adminRoute);
 
 adminRoute.get('/dashboard', (req, res) => {
     console.log(req.baseUrl);
+    console.log(req.originalUrl);
+    console.log(req.url);
+    console.log(req.path);
+    console.log(req.hostname);
+    console.log(req.ip);
+    console.log(req.method);
+    console.log(req.protocol);
+    console.log(req.params);
+    console.log(req.secure);
     res.send('This is admin dash dashboard url');
 });
 
 app.get('/user/:id', (req, res) => {
     console.log(req.baseUrl);
+    console.log(req.originalUrl);
+    console.log(req.url);
+    console.log(req.path);
+    console.log(req.hostname);
+    console.log(req.ip);
+    console.log(req.method);
+    console.log(req.protocol);
+    console.log(req.params);
+    console.log(req.params.id);
+    console.log(req.query);
+    console.log(req.cookies);
+    console.log('No Signed Cookie Here : ' , req.signedCookies);
+    console.log(req.secure);
     res.send('User GET Here');
+});
+
+app.post('/user', (req, res) => {
+    console.log(req.body);
+    res.send('User POST Here');
 });
 
 // app.post('/', (req, res) => {
@@ -92,7 +123,6 @@ app.get('/user/:id', (req, res) => {
 });
  app.use(router);
 
- app.use(express.json());
  // app.use(express.raw());
  // app.use(express.text());
  // app.use(express.urlencoded());
