@@ -73,12 +73,66 @@ app.post('/user', (req, res) => {
     res.send('User POST Here');
 });
 
-// app.post('/', (req, res) => {
-//     res.send('Hello Post Page');
-// });
-// app.put('/', (req, res) => {
-//     res.send('Hello PUT Page');
-// });
+app.get('/about', (req, res) => {
+
+    // console.log(res.headersSent);
+    // console.log(res.locals);
+
+    // res.send('Data Send');
+    // res.end();
+
+    // res.render('pages/about', {
+    //     name: "SOURAV ROY"
+    // });
+
+    // console.log(res.headersSent);
+    // console.log(res.locals);
+
+    /**
+     res.json({
+        title: 'Sourav Title'
+    });
+     res.status(200);
+     res.end(); // After res.status() res.end() MUST ****************
+     */
+
+    // res.sendStatus(200);
+    /**
+     res.format({
+        'text/plain': () => {
+            res.send('Hi Plane Text Here');
+        },
+        'text/html': () => {
+            res.render('pages/about', {
+                name: "Res Format Is Awesome"
+            });
+        },
+        'application/json': () => {
+            res.json({
+                msg: 'JSON Format Is Awesome'
+            })
+        },
+        default: () => {
+            res.status(406).send('Formatted Data Is not acceptable');
+        }
+    })
+     */
+
+    // res.cookie('name', 'SetMyPersonalCookie');
+    // res.location('/testLocation');
+    // res.redirect('/test');
+    // res.end('Cookie Set Successful');
+
+    res.set('Platform', 'Learn With Sourav Default');
+    console.log('Response Get From res.set() -> ',res.get('Platform'));
+    res.end();
+
+});
+
+app.get('/test', (req, res) => {
+    res.send('Hello Test Page By redirect');
+});
+
 // app.delete('/', (req, res) => {
 //     res.send('Hello Delete Page');
 // });
