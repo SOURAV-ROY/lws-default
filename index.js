@@ -73,9 +73,11 @@ app.post('/user', (req, res) => {
     res.send('User POST Here');
 });
 
-// app.post('/', (req, res) => {
-//     res.send('Hello Post Page');
-// });
+app.get('/about', (req, res) => {
+    res.render('pages/about',{
+        name: "SOURAV ROY"
+    });
+});
 // app.put('/', (req, res) => {
 //     res.send('Hello PUT Page');
 // });
