@@ -75,7 +75,7 @@ app.post('/user', (req, res) => {
 
 app.get('/about', (req, res) => {
 
-    console.log(res.headersSent);
+    // console.log(res.headersSent);
     // console.log(res.locals);
 
     // res.send('Data Send');
@@ -85,14 +85,38 @@ app.get('/about', (req, res) => {
     //     name: "SOURAV ROY"
     // });
 
-    console.log(res.headersSent);
+    // console.log(res.headersSent);
     // console.log(res.locals);
-    res.json({
+
+    /**
+     res.json({
         title: 'Sourav Title'
     });
+     res.status(200);
+     res.end(); // After res.status() res.end() MUST ****************
+     */
 
-    res.status(200);
-    res.end(); // After res.status() res.end() MUST ****************
+    res.sendStatus(200);
+
+    res.format({
+        'text/plain': () => {
+            res.send('Hi Plane Text Here');
+        },
+        'text/html': () => {
+            res.render('pages/about', {
+                name: "Res Format Is Awesome"
+            });
+        },
+        'application/json': () => {
+            res.json({
+                msg: 'JSON Format Is Awesome'
+            })
+        },
+        default: () => {
+            res.status(406).send('Formatted Data Is not acceptable');
+        }
+    })
+
 });
 // app.put('/', (req, res) => {
 //     res.send('Hello PUT Page');
