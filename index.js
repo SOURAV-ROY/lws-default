@@ -74,9 +74,25 @@ app.post('/user', (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    res.render('pages/about',{
-        name: "SOURAV ROY"
+
+    console.log(res.headersSent);
+    // console.log(res.locals);
+
+    // res.send('Data Send');
+    // res.end();
+
+    // res.render('pages/about', {
+    //     name: "SOURAV ROY"
+    // });
+
+    console.log(res.headersSent);
+    // console.log(res.locals);
+    res.json({
+        title: 'Sourav Title'
     });
+
+    res.status(200);
+    res.end(); // After res.status() res.end() MUST ****************
 });
 // app.put('/', (req, res) => {
 //     res.send('Hello PUT Page');
