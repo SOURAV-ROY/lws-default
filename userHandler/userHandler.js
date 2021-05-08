@@ -19,7 +19,7 @@ const userHandler = (req, res) => {
     //req.accepts() method use here ********************************************
     console.log('Only accept json Data', req.accepts('json').rainbow.bold);
     console.log('Only accept json Data', req.accepts('json').random.bold);
-    console.log('Only accept json Data', req.accepts('html'));
+    console.log('Html Not Accepted', req.accepts('html'));
 
     if (req.accepts('html')) {
         res.render();
@@ -31,7 +31,7 @@ const userHandler = (req, res) => {
     console.log(req.get('Accept').bgGreen.bold);
 
     //As like Params ******************************************************
-    console.log(req.param('filter').blue.bold);
+    // console.log(req.param('filter').blue.bold);
 
     res.send('User GET Here');
 };
