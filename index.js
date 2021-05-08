@@ -96,9 +96,9 @@ app.get('/about', (req, res) => {
      res.end(); // After res.status() res.end() MUST ****************
      */
 
-    res.sendStatus(200);
-
-    res.format({
+    // res.sendStatus(200);
+    /**
+     res.format({
         'text/plain': () => {
             res.send('Hi Plane Text Here');
         },
@@ -116,6 +116,10 @@ app.get('/about', (req, res) => {
             res.status(406).send('Formatted Data Is not acceptable');
         }
     })
+     */
+
+    res.cookie('name', 'SetMyPersonalCookie');
+    res.end('Cookie Set Successful');
 
 });
 // app.put('/', (req, res) => {
