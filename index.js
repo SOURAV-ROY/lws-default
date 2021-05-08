@@ -118,13 +118,21 @@ app.get('/about', (req, res) => {
     })
      */
 
-    res.cookie('name', 'SetMyPersonalCookie');
-    res.end('Cookie Set Successful');
+    // res.cookie('name', 'SetMyPersonalCookie');
+    // res.location('/testLocation');
+    // res.redirect('/test');
+    // res.end('Cookie Set Successful');
+
+    res.set('Platform', 'Learn With Sourav Default');
+    console.log('Response Get From res.set() -> ',res.get('Platform'));
+    res.end();
 
 });
-// app.put('/', (req, res) => {
-//     res.send('Hello PUT Page');
-// });
+
+app.get('/test', (req, res) => {
+    res.send('Hello Test Page By redirect');
+});
+
 // app.delete('/', (req, res) => {
 //     res.send('Hello Delete Page');
 // });
