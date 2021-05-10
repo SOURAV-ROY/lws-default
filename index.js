@@ -62,14 +62,26 @@ app.route('/api/v1/first')
         res.send('Hello Delete');
     })
 
-// Create Logger Middleware Here *******************************
-const logger = (req, res, next) => {
+const loggerWrapper = (options) =>
+    function (req, res, next) {
+        if (options.log) {
+            console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
+            next();
+        } else {
+            throw new Error('This is an error through Middleware');
+        }
+    };
+
+/**
+ // Create Logger Middleware Here *******************************
+ const logger = (req, res, next) => {
     console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
     // res.end()
-    // next();
+    next();
 
-    throw new Error('This is an error through Middleware');
+    // throw new Error('This is an error through Middleware');
 }
+ */
 
 const errorMiddleware = (error, req, res, next) => {
     console.log(error.message);
@@ -77,8 +89,12 @@ const errorMiddleware = (error, req, res, next) => {
 };
 
 // Use Logger Middleware **********************
-adminRouter.use(logger);
+// adminRouter.use(logger);
+
+adminRouter.use(loggerWrapper({log: true}));
+// adminRouter.use(loggerWrapper({log: false}));
 adminRouter.use(errorMiddleware);
+
 
 //Admin Route *********************************
 app.use('/admin', adminRouter);
