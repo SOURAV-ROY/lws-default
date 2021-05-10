@@ -73,17 +73,15 @@ app.post('/user', (req, res) => {
     res.send('User POST Here');
 });
 
-const myMiddleware1 = (req, res, next) => {
-    console.log(`My Middleware 1 is Working`.cyan);
-    next();
-}
-const myMiddleware2 = (req, res, next) => {
-    console.log(`My Middleware 2 is Working`.gray);
+// Create Logger Middleware Here *******************************
+const logger = (req, res, next) => {
+    console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
+    // res.end()
     next();
 }
 
-app.use(myMiddleware1);
-app.use(myMiddleware2);
+// Use Logger Middleware **********************
+app.use(logger);
 
 app.get('/about', (req, res) => {
 
