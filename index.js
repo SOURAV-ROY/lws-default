@@ -73,13 +73,25 @@ app.post('/user', (req, res) => {
     res.send('User POST Here');
 });
 
+const myMiddleware1 = (req, res, next) => {
+    console.log(`My Middleware 1 is Working`.cyan);
+    next();
+}
+const myMiddleware2 = (req, res, next) => {
+    console.log(`My Middleware 2 is Working`.gray);
+    next();
+}
+
+app.use(myMiddleware1);
+app.use(myMiddleware2);
+
 app.get('/about', (req, res) => {
 
     // console.log(res.headersSent);
     // console.log(res.locals);
 
-    // res.send('Data Send');
-    // res.end();
+    res.send('About Page Here');
+    res.end();
 
     // res.render('pages/about', {
     //     name: "SOURAV ROY"
@@ -122,10 +134,11 @@ app.get('/about', (req, res) => {
     // res.location('/testLocation');
     // res.redirect('/test');
     // res.end('Cookie Set Successful');
-
-    res.set('Platform', 'Learn With Sourav Default');
-    console.log('Response Get From res.set() -> ',res.get('Platform'));
-    res.end();
+    /**
+     res.set('Platform', 'Learn With Sourav Default');
+     console.log('Response Get From res.set() -> ',res.get('Platform'));
+     res.end();
+     */
 
 });
 
