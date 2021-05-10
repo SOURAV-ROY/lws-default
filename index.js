@@ -36,8 +36,9 @@ dotenv.config();
  */
 
 const app = express();
-const adminRoute = express();
+const adminRouter = express();
 
+// ALL Here Middleware *****************************************
 app.use(express.json());
 app.use(cookieParser());
 
@@ -61,10 +62,44 @@ app.route('/api/v1/first')
         res.send('Hello Delete');
     })
 
-//Admin Route *********************************
-app.use('/admin', adminRoute);
+const loggerWrapper = (options) =>
+    function (req, res, next) {
+        if (options.log) {
+            console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
+            next();
+        } else {
+            throw new Error('This is an error through Middleware');
+        }
+    };
 
-adminRoute.get('/dashboard', adminHandler);
+/**
+ // Create Logger Middleware Here *******************************
+ const logger = (req, res, next) => {
+    console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
+    // res.end()
+    next();
+
+    // throw new Error('This is an error through Middleware');
+}
+ */
+
+const errorMiddleware = (error, req, res, next) => {
+    console.log(error.message);
+    res.status(500).send('There was a server error Middleware');
+};
+
+// Use Logger Middleware **********************
+// adminRouter.use(logger);
+
+adminRouter.use(loggerWrapper({log: true}));
+// adminRouter.use(loggerWrapper({log: false}));
+adminRouter.use(errorMiddleware);
+
+
+//Admin Route *********************************
+app.use('/admin', adminRouter);
+
+adminRouter.get('/dashboard', adminHandler);
 
 app.get('/user/:id', userHandler);
 
@@ -78,8 +113,8 @@ app.get('/about', (req, res) => {
     // console.log(res.headersSent);
     // console.log(res.locals);
 
-    // res.send('Data Send');
-    // res.end();
+    res.send('About Page Here');
+    res.end();
 
     // res.render('pages/about', {
     //     name: "SOURAV ROY"
@@ -122,10 +157,11 @@ app.get('/about', (req, res) => {
     // res.location('/testLocation');
     // res.redirect('/test');
     // res.end('Cookie Set Successful');
-
-    res.set('Platform', 'Learn With Sourav Default');
-    console.log('Response Get From res.set() -> ',res.get('Platform'));
-    res.end();
+    /**
+     res.set('Platform', 'Learn With Sourav Default');
+     console.log('Response Get From res.set() -> ',res.get('Platform'));
+     res.end();
+     */
 
 });
 
