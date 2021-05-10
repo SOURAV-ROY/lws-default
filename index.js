@@ -36,7 +36,7 @@ dotenv.config();
  */
 
 const app = express();
-const adminRoute = express();
+const adminRouter = express();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -61,18 +61,6 @@ app.route('/api/v1/first')
         res.send('Hello Delete');
     })
 
-//Admin Route *********************************
-app.use('/admin', adminRoute);
-
-adminRoute.get('/dashboard', adminHandler);
-
-app.get('/user/:id', userHandler);
-
-app.post('/user', (req, res) => {
-    console.log(req.body);
-    res.send('User POST Here');
-});
-
 // Create Logger Middleware Here *******************************
 const logger = (req, res, next) => {
     console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
@@ -81,7 +69,19 @@ const logger = (req, res, next) => {
 }
 
 // Use Logger Middleware **********************
-app.use(logger);
+adminRouter.use(logger);
+
+//Admin Route *********************************
+app.use('/admin', adminRouter);
+
+adminRouter.get('/dashboard', adminHandler);
+
+app.get('/user/:id', userHandler);
+
+app.post('/user', (req, res) => {
+    console.log(req.body);
+    res.send('User POST Here');
+});
 
 app.get('/about', (req, res) => {
 
