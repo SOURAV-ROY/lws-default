@@ -38,6 +38,7 @@ dotenv.config();
 const app = express();
 const adminRouter = express();
 
+// ALL Here Middleware *****************************************
 app.use(express.json());
 app.use(cookieParser());
 
@@ -65,11 +66,19 @@ app.route('/api/v1/first')
 const logger = (req, res, next) => {
     console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
     // res.end()
-    next();
+    // next();
+
+    throw new Error('This is an error through Middleware');
 }
+
+const errorMiddleware = (error, req, res, next) => {
+    console.log(error.message);
+    res.status(500).send('There was a server error Middleware');
+};
 
 // Use Logger Middleware **********************
 adminRouter.use(logger);
+adminRouter.use(errorMiddleware);
 
 //Admin Route *********************************
 app.use('/admin', adminRouter);
