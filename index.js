@@ -170,8 +170,8 @@ app.get('/about', (req, res) => {
 
 });
 
-app.get('/test', (req, res) => {
-    res.send('Hello Test Page By redirect');
+app.get('/', (req, res) => {
+    res.send('Hello 2021');
 });
 
 // app.delete('/', (req, res) => {
