@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const adminHandler = require("./adminHandler/adminHandler");
 const userHandler = require("./userHandler/userHandler");
+const adminRouter = require('./routes/adminRouter');
+const publicRouter = require("./routes/publicRouter");
 
 //Dot ENV Use Here
 dotenv.config();
@@ -36,7 +38,7 @@ dotenv.config();
  */
 
 const app = express();
-const adminRouter = express();
+// const adminRouter = express();
 
 // ALL Here Middleware *****************************************
 app.use(express.json());
@@ -96,8 +98,11 @@ adminRouter.use(loggerWrapper({log: true}));
 adminRouter.use(errorMiddleware);
 
 
-//Admin Route *********************************
+// Admin Router Here **************************
 app.use('/admin', adminRouter);
+
+// public Router Here *************************
+app.use('/', publicRouter);
 
 adminRouter.get('/dashboard', adminHandler);
 
