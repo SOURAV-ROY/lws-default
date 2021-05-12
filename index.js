@@ -102,7 +102,7 @@ adminRouter.use(errorMiddleware);
 app.use('/admin', adminRouter);
 
 // public Router Here *************************
-app.use('/', publicRouter);
+app.use('/public', publicRouter);
 
 adminRouter.get('/dashboard', adminHandler);
 
@@ -169,12 +169,13 @@ app.get('/about', (req, res) => {
      */
 
 });
-
-app.get('/', (req, res) => {
-    // res.send('Hello 2021');
-    res.send(a);
+/**
+ app.get('/', (req, res) => {
+    res.send('Hello 2021');
+    // res.send(a);
     throw new Error('Create Some Error Here By Myself');
 });
+ */
 
 // app.delete('/', (req, res) => {
 //     res.send('Hello Delete Page');
@@ -253,12 +254,38 @@ app.get('/', (req, res) => {
 });
  */
 
+app.get('/loop', (req, res, next) => {
+    for (let i = 0; i <= 5; i++) {
+        if (i === 5) {
+            next("Here Is An Error");
+        } else {
+            res.write('a');
+        }
+    }
+    res.end();
+})
+
+//4040 Error Bundler ********************************
+app.use((req, res, next) => {
+    // res.status(404).send('Requested URL not found');
+    next('Requested URL not found');
+});
+
 // Invisible default error handling middleware *********
 
 app.use((error, req, res, next) => {
-    console.log(error);
+    // console.log(error);
     // console.log("Error Handling it is known");
-    res.status(500).send('There Was an Error Created By Me');
+    // res.status(500).send('There Was an Error Created By Me');
+    if (res.headersSent) {
+        next('There was a headers Problem');
+    } else {
+        if (error.message) {
+            res.status(500).send(error.message);
+        } else {
+            res.status(500).send('There Was an Error Created By Me');
+        }
+    }
 });
 
 let PORT = process.env.PORT || 2022;
