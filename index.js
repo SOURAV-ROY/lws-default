@@ -11,8 +11,7 @@ const publicRouter = require("./routes/publicRouter");
 //Dot ENV Use Here
 dotenv.config();
 
-/**
- // *****************************************************************************
+/*********************************************************************************
  let begin = 0;
 
  function log(msg) {
@@ -34,8 +33,7 @@ dotenv.config();
  while (Date.now() - now < 1000) {
 }
  log('done loop');
- // *****************************************************************************
- */
+ **********************************************************************************/
 
 const app = express();
 // const adminRouter = express();
@@ -74,7 +72,7 @@ const loggerWrapper = (options) =>
         }
     };
 
-/**
+/***********************************************************************************
  // Create Logger Middleware Here *******************************
  const logger = (req, res, next) => {
     console.log(`${new Date(Date.now()).toLocaleString().cyan} - ${req.method.bgBlue.bold} - ${req.originalUrl.bgMagenta} - ${req.protocol.green} - ${req.ip.rainbow}`);
@@ -83,7 +81,7 @@ const loggerWrapper = (options) =>
 
     // throw new Error('This is an error through Middleware');
 }
- */
+ ************************************************************************************/
 
 const errorMiddleware = (error, req, res, next) => {
     console.log(error.message);
@@ -128,16 +126,16 @@ app.get('/about', (req, res) => {
     // console.log(res.headersSent);
     // console.log(res.locals);
 
-    /**
+    /**************************************************************************
      res.json({
         title: 'Sourav Title'
     });
      res.status(200);
      res.end(); // After res.status() res.end() MUST ****************
-     */
+     **************************************************************************/
 
     // res.sendStatus(200);
-    /**
+    /****************************************************************************
      res.format({
         'text/plain': () => {
             res.send('Hi Plane Text Here');
@@ -156,32 +154,33 @@ app.get('/about', (req, res) => {
             res.status(406).send('Formatted Data Is not acceptable');
         }
     })
-     */
+     **************************************************************************/
 
     // res.cookie('name', 'SetMyPersonalCookie');
     // res.location('/testLocation');
     // res.redirect('/test');
     // res.end('Cookie Set Successful');
-    /**
+    /******************************************************************
      res.set('Platform', 'Learn With Sourav Default');
      console.log('Response Get From res.set() -> ',res.get('Platform'));
      res.end();
-     */
+     *******************************************************************/
 
 });
-/**
+/************************************************************************
  app.get('/', (req, res) => {
     res.send('Hello 2021');
     // res.send(a);
     throw new Error('Create Some Error Here By Myself');
 });
- */
+ ************************************************************************/
 
 // app.delete('/', (req, res) => {
 //     res.send('Hello Delete Page');
 // });
 
-/** const blog = express()
+/*************************************************************************
+ const blog = express()
  const blogAdmin = express()
 
  app.use('/blogs', blog)
@@ -252,9 +251,10 @@ app.get('/about', (req, res) => {
     console.log(req.body);
     res.send('This is post url with method');
 });
- */
+ ******************************************************************************/
 
-app.get('/loop', (req, res, next) => {
+/*******************************************************************************
+ app.get('/loop', (req, res, next) => {
     for (let i = 0; i <= 5; i++) {
         if (i === 5) {
             next("Here Is An Error");
@@ -265,15 +265,15 @@ app.get('/loop', (req, res, next) => {
     res.end();
 })
 
-//4040 Error Bundler ********************************
-app.use((req, res, next) => {
+ //4040 Error Bundler ********************************
+ app.use((req, res, next) => {
     // res.status(404).send('Requested URL not found');
     next('Requested URL not found');
 });
 
-// Invisible default error handling middleware *********
+ // Invisible default error handling middleware *********
 
-app.use((error, req, res, next) => {
+ app.use((error, req, res, next) => {
     // console.log(error);
     // console.log("Error Handling it is known");
     // res.status(500).send('There Was an Error Created By Me');
@@ -286,6 +286,19 @@ app.use((error, req, res, next) => {
             res.status(500).send('There Was an Error Created By Me');
         }
     }
+});
+ ****************************************************************************/
+
+app.get('/file', (req, res, next) => {
+    // fs.readFileSync('/file-deosnot-exist', (error, data) => {
+    fs.readFile('/file-deosnot-exist', (error, data) => {
+        // Async Error Handler Here ******************
+        if (error) {
+            next(error);
+        } else {
+            res.send(data);
+        }
+    })
 });
 
 let PORT = process.env.PORT || 2022;
