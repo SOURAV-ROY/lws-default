@@ -171,7 +171,9 @@ app.get('/about', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Hello 2021');
+    // res.send('Hello 2021');
+    res.send(a);
+    throw new Error('Create Some Error Here By Myself');
 });
 
 // app.delete('/', (req, res) => {
@@ -250,6 +252,14 @@ app.get('/', (req, res) => {
     res.send('This is post url with method');
 });
  */
+
+// Invisible default error handling middleware *********
+
+app.use((error, req, res, next) => {
+    console.log(error);
+    // console.log("Error Handling it is known");
+    res.status(500).send('There Was an Error Created By Me');
+});
 
 let PORT = process.env.PORT || 2022;
 app.listen(PORT, () => {
