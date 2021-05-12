@@ -271,11 +271,14 @@ app.get('/about', (req, res) => {
     next('Requested URL not found');
 });
  ****************************************************************************/
-
-app.get('/file', (req, res, next) => {
+/****************************************************************************************
+ app.get('/file', (req, res, next) => {
     // fs.readFileSync('/file-deosnot-exist', (error, data) => {
-    fs.readFile('/file-does-not-exist', (error, data) => {
+    fs.readFile('/file-does-not-exist', 'utf-8',(error, data) => {
         // Async Error Handler Here ******************
+        console.log(data);
+        next(error);
+        // console.log(data.property);
         if (error) {
             next(error);
         } else {
@@ -283,6 +286,24 @@ app.get('/file', (req, res, next) => {
         }
     })
 });
+ *******************************************************************************************/
+
+// Async Error Handle Is Awesome **********************
+app.get('/file', [
+        (req, res, next) => {
+            fs.readFile('/file-does-not-exist', 'utf-8', (error, data) => {
+                // Async Error Handler Here ******************
+                console.log(data);
+                next(error);
+            });
+        },
+
+        (req, res, next) => {
+            console.log(data.property);
+        }
+    ]
+);
+
 
 app.get('/a', (req, res, next) => {
     setTimeout(function () {
