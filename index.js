@@ -270,10 +270,38 @@ app.get('/about', (req, res) => {
     // res.status(404).send('Requested URL not found');
     next('Requested URL not found');
 });
+ ****************************************************************************/
 
- // Invisible default error handling middleware *********
+app.get('/file', (req, res, next) => {
+    // fs.readFileSync('/file-deosnot-exist', (error, data) => {
+    fs.readFile('/file-does-not-exist', (error, data) => {
+        // Async Error Handler Here ******************
+        if (error) {
+            next(error);
+        } else {
+            res.send(data);
+        }
+    })
+});
 
- app.use((error, req, res, next) => {
+app.get('/a', (req, res, next) => {
+    setTimeout(function () {
+        try {
+            console.log(a)
+            // res.send('Print A In Body');
+        } catch (error) {
+            next(error);
+        }
+    }, 1000)
+});
+
+app.use((req, res, next) => {
+    console.log('I am not called');
+    next();
+})
+
+// Invisible default error handling middleware *********
+app.use((error, req, res, next) => {
     // console.log(error);
     // console.log("Error Handling it is known");
     // res.status(500).send('There Was an Error Created By Me');
@@ -287,19 +315,7 @@ app.get('/about', (req, res) => {
         }
     }
 });
- ****************************************************************************/
 
-app.get('/file', (req, res, next) => {
-    // fs.readFileSync('/file-deosnot-exist', (error, data) => {
-    fs.readFile('/file-deosnot-exist', (error, data) => {
-        // Async Error Handler Here ******************
-        if (error) {
-            next(error);
-        } else {
-            res.send(data);
-        }
-    })
-});
 
 let PORT = process.env.PORT || 2022;
 app.listen(PORT, () => {
