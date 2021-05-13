@@ -1,8 +1,10 @@
 const express = require('express',);
 const fs = require('fs');
+const path = require('path');
 require('colors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
 const adminHandler = require("./adminHandler/adminHandler");
 const userHandler = require("./userHandler/userHandler");
 const adminRouter = require('./routes/adminRouter');
@@ -35,8 +37,99 @@ dotenv.config();
  log('done loop');
  **********************************************************************************/
 
+
+// FIle Upload From Here
+const UPLOADS_FOLDER = './fileUpload/uploads';
+
+//Define the storage ***************************
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_FOLDER);
+    },
+    filename: (req, file, cb) => {
+        // File name generate from here
+        const fileExt = path.extname(file.originalname);
+        const filename = file.originalname
+            .replace(fileExt, '')
+            .toLowerCase()
+            .split(' ')
+            .join('-') + '-' + Date.now();
+
+        cb(null, filename + fileExt);
+    }
+})
+
+let upload = multer(
+    {
+        storage: storage,
+        limits: {
+            fileSize: 1000000 // 1MB => File Upload Less than 1 MB MUST
+        },
+
+        fileFilter: (req, file, cb) => {
+            console.log(file);
+
+            if (file.fieldname === "avatar") {
+                if (
+                    file.mimetype === "image/png" ||
+                    file.mimetype === "image/jpg" ||
+                    file.mimetype === "image/jpeg"
+                ) {
+                    cb(null, true);
+                } else {
+                    cb(new Error("Only .jpg, .png or .jpeg format allowed!"));
+                }
+            } else if (file.fieldname === "doc") {
+                if (file.mimetype === "application/pdf") {
+                    cb(null, true);
+                } else {
+                    cb(new Error("Only .pdf format allowed!"));
+                }
+            } else {
+                cb(new Error("There was an unknown error!"));
+            }
+        },
+    });
+
+
+// Express Ap RUN From Here *******************
 const app = express();
 // const adminRouter = express();
+
+// File Upload From Here *******************************************
+
+// app.post('/fileupload', upload.array('avatar', 3), (req, res) => {
+// app.post('/fileupload', upload.none(), (req, res) => {
+// app.post('/fileupload', upload.single('avatar'), (req, res) => {
+
+// app.post('/fileupload', upload.fields(
+//     [
+//         {name: 'avatar', maxCount: 1},
+//         {name: 'doc', maxCount: 1}
+//     ]
+// ), (req, res) => {
+//
+//
+//     res.send('File Upload Successful DONE');
+// });
+
+app.post(
+    "/fileupload",
+    upload.fields([
+        {
+            name: "avatar",
+            maxCount: 2,
+        },
+        {
+            name: "doc",
+            maxCount: 1,
+        },
+    ]),
+    (req, res, next) => {
+        console.log(req.files);
+        res.send("File Upload success");
+    }
+);
 
 // ALL Here Middleware *****************************************
 app.use(express.json());
@@ -304,8 +397,8 @@ app.get('/file', [
     ]
 );
 
-
-app.get('/a', (req, res, next) => {
+/********************************************************************************
+ app.get('/a', (req, res, next) => {
     setTimeout(function () {
         try {
             console.log(a)
@@ -315,14 +408,29 @@ app.get('/a', (req, res, next) => {
         }
     }, 1000)
 });
+ *********************************************************************************/
 
-app.use((req, res, next) => {
-    console.log('I am not called');
-    next();
-})
+// app.use((req, res, next) => {
+//     console.log('I am not called');
+//     next();
+// })
 
-// Invisible default error handling middleware *********
-app.use((error, req, res, next) => {
+// default error handler
+app.use((err, req, res, next) => {
+    if (err) {
+        if (err instanceof multer.MulterError) {
+            res.status(500).send("There was an upload error!");
+        } else {
+            res.status(500).send(err.message);
+        }
+    } else {
+        res.send("success");
+    }
+});
+
+/**
+ // Invisible default error handling middleware *********
+ app.use((error, req, res, next) => {
     // console.log(error);
     // console.log("Error Handling it is known");
     // res.status(500).send('There Was an Error Created By Me');
@@ -336,7 +444,7 @@ app.use((error, req, res, next) => {
         }
     }
 });
-
+ */
 
 let PORT = process.env.PORT || 2022;
 app.listen(PORT, () => {
