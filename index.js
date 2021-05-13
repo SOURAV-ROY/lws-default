@@ -3,6 +3,7 @@ const fs = require('fs');
 require('colors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
 const adminHandler = require("./adminHandler/adminHandler");
 const userHandler = require("./userHandler/userHandler");
 const adminRouter = require('./routes/adminRouter');
@@ -287,6 +288,20 @@ app.get('/about', (req, res) => {
     })
 });
  *******************************************************************************************/
+
+// FIle Upload From Here
+
+const UPLOADS_FOLDER = './fileUpload/uploads';
+
+let upload = multer(
+    {
+        dest: UPLOADS_FOLDER
+    });
+
+app.post('/fileupload', upload.single('avatar'), (req, res) => {
+    res.send('File Upload here');
+})
+
 
 // Async Error Handle Is Awesome **********************
 app.get('/file', [
