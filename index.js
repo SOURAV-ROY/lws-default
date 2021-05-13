@@ -295,19 +295,38 @@ const UPLOADS_FOLDER = './fileUpload/uploads';
 
 let upload = multer(
     {
-        dest: UPLOADS_FOLDER
+        dest: UPLOADS_FOLDER,
+        limits: {
+            fileSize: 1000000 // 1MB => File Upload Less than 1 MB MUST
+        },
+        fileFilter: (req, file, cb) => {
+            console.log(file);
+            if (
+                file.mimetype === 'image/png' ||
+                file.mimetype === 'image/jpg' ||
+                file.mimetype === 'image/jpeg'
+            ) {
+                cb(null, true);
+            } else {
+                cb(new Error('Only png, jpg & jpeg is allowed'));
+            }
+        }
     });
 
-// app.post('/fileupload', upload.single('avatar'), (req, res) => {
 // app.post('/fileupload', upload.array('avatar', 3), (req, res) => {
-app.post('/fileupload', upload.fields(
-    [
-        {name: 'avatar', maxCount: 1},
-        {name: 'gallery', maxCount: 3}
-    ]
-), (req, res) => {
-    res.send('File Upload here');
-})
+// app.post('/fileupload', upload.none(), (req, res) => {
+/**
+ app.post('/fileupload', upload.fields(
+ [
+ {name: 'avatar', maxCount: 1},
+ {name: 'gallery', maxCount: 3}
+ ]
+ ), (req, res) => {
+ */
+
+app.post('/fileupload', upload.single('avatar'), (req, res) => {
+    res.send('File Upload Successful DONE');
+});
 
 
 // Async Error Handle Is Awesome **********************
@@ -326,8 +345,8 @@ app.get('/file', [
     ]
 );
 
-
-app.get('/a', (req, res, next) => {
+/********************************************************************************
+ app.get('/a', (req, res, next) => {
     setTimeout(function () {
         try {
             console.log(a)
@@ -337,14 +356,28 @@ app.get('/a', (req, res, next) => {
         }
     }, 1000)
 });
+ *********************************************************************************/
 
-app.use((req, res, next) => {
-    console.log('I am not called');
-    next();
-})
+// app.use((req, res, next) => {
+//     console.log('I am not called');
+//     next();
+// })
 
-// Invisible default error handling middleware *********
-app.use((error, req, res, next) => {
+app.use((err, req, res, next) => {
+    if (err) {
+        if (err instanceof multer.MulterError) {
+            res.status(500).send('There was an upload Error');
+        } else {
+            res.status(500).send(err.message);
+        }
+    } else {
+        res.status(200).send('File Upload Successful')
+    }
+});
+
+/**
+ // Invisible default error handling middleware *********
+ app.use((error, req, res, next) => {
     // console.log(error);
     // console.log("Error Handling it is known");
     // res.status(500).send('There Was an Error Created By Me');
@@ -358,7 +391,7 @@ app.use((error, req, res, next) => {
         }
     }
 });
-
+ */
 
 let PORT = process.env.PORT || 2022;
 app.listen(PORT, () => {
