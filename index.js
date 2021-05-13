@@ -1,5 +1,6 @@
 const express = require('express',);
 const fs = require('fs');
+const path = require('path');
 require('colors');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
@@ -40,9 +41,27 @@ dotenv.config();
 // FIle Upload From Here
 const UPLOADS_FOLDER = './fileUpload/uploads';
 
+//Define the storage ***************************
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_FOLDER);
+    },
+    filename: (req, file, cb) => {
+        // File name generate from here
+        const fileExt = path.extname(file.originalname);
+        const filename = file.originalname
+            .replace(fileExt, '')
+            .toLowerCase()
+            .split(' ')
+            .join('-') + '-' + Date.now();
+
+        cb(null, filename + fileExt);
+    }
+})
+
 let upload = multer(
     {
-        dest: UPLOADS_FOLDER,
+        storage: storage,
         limits: {
             fileSize: 1000000 // 1MB => File Upload Less than 1 MB MUST
         },
@@ -107,7 +126,7 @@ app.post(
         },
     ]),
     (req, res, next) => {
-        res.send("success");
+        res.send("File Upload success");
     }
 );
 
