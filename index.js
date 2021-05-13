@@ -36,8 +36,80 @@ dotenv.config();
  log('done loop');
  **********************************************************************************/
 
+
+// FIle Upload From Here
+const UPLOADS_FOLDER = './fileUpload/uploads';
+
+let upload = multer(
+    {
+        dest: UPLOADS_FOLDER,
+        limits: {
+            fileSize: 1000000 // 1MB => File Upload Less than 1 MB MUST
+        },
+
+        fileFilter: (req, file, cb) => {
+            console.log(file);
+
+            if (file.fieldname === "avatar") {
+                if (
+                    file.mimetype === "image/png" ||
+                    file.mimetype === "image/jpg" ||
+                    file.mimetype === "image/jpeg"
+                ) {
+                    cb(null, true);
+                } else {
+                    cb(new Error("Only .jpg, .png or .jpeg format allowed!"));
+                }
+            } else if (file.fieldname === "doc") {
+                if (file.mimetype === "application/pdf") {
+                    cb(null, true);
+                } else {
+                    cb(new Error("Only .pdf format allowed!"));
+                }
+            } else {
+                cb(new Error("There was an unknown error!"));
+            }
+        },
+    });
+
+
+// Express Ap RUN From Here *******************
 const app = express();
 // const adminRouter = express();
+
+// File Upload From Here *******************************************
+
+// app.post('/fileupload', upload.array('avatar', 3), (req, res) => {
+// app.post('/fileupload', upload.none(), (req, res) => {
+// app.post('/fileupload', upload.single('avatar'), (req, res) => {
+
+// app.post('/fileupload', upload.fields(
+//     [
+//         {name: 'avatar', maxCount: 1},
+//         {name: 'doc', maxCount: 1}
+//     ]
+// ), (req, res) => {
+//
+//
+//     res.send('File Upload Successful DONE');
+// });
+
+app.post(
+    "/fileupload",
+    upload.fields([
+        {
+            name: "avatar",
+            maxCount: 2,
+        },
+        {
+            name: "doc",
+            maxCount: 1,
+        },
+    ]),
+    (req, res, next) => {
+        res.send("success");
+    }
+);
 
 // ALL Here Middleware *****************************************
 app.use(express.json());
@@ -289,46 +361,6 @@ app.get('/about', (req, res) => {
 });
  *******************************************************************************************/
 
-// FIle Upload From Here
-
-const UPLOADS_FOLDER = './fileUpload/uploads';
-
-let upload = multer(
-    {
-        dest: UPLOADS_FOLDER,
-        limits: {
-            fileSize: 1000000 // 1MB => File Upload Less than 1 MB MUST
-        },
-        fileFilter: (req, file, cb) => {
-            console.log(file);
-            if (
-                file.mimetype === 'image/png' ||
-                file.mimetype === 'image/jpg' ||
-                file.mimetype === 'image/jpeg'
-            ) {
-                cb(null, true);
-            } else {
-                cb(new Error('Only png, jpg & jpeg is allowed'));
-            }
-        }
-    });
-
-// app.post('/fileupload', upload.array('avatar', 3), (req, res) => {
-// app.post('/fileupload', upload.none(), (req, res) => {
-/**
- app.post('/fileupload', upload.fields(
- [
- {name: 'avatar', maxCount: 1},
- {name: 'gallery', maxCount: 3}
- ]
- ), (req, res) => {
- */
-
-app.post('/fileupload', upload.single('avatar'), (req, res) => {
-    res.send('File Upload Successful DONE');
-});
-
-
 // Async Error Handle Is Awesome **********************
 app.get('/file', [
         (req, res, next) => {
@@ -363,15 +395,16 @@ app.get('/file', [
 //     next();
 // })
 
+// default error handler
 app.use((err, req, res, next) => {
     if (err) {
         if (err instanceof multer.MulterError) {
-            res.status(500).send('There was an upload Error');
+            res.status(500).send("There was an upload error!");
         } else {
             res.status(500).send(err.message);
         }
     } else {
-        res.status(200).send('File Upload Successful')
+        res.send("success");
     }
 });
 
