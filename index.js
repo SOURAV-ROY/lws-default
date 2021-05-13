@@ -298,7 +298,14 @@ let upload = multer(
         dest: UPLOADS_FOLDER
     });
 
-app.post('/fileupload', upload.single('avatar'), (req, res) => {
+// app.post('/fileupload', upload.single('avatar'), (req, res) => {
+// app.post('/fileupload', upload.array('avatar', 3), (req, res) => {
+app.post('/fileupload', upload.fields(
+    [
+        {name: 'avatar', maxCount: 1},
+        {name: 'gallery', maxCount: 3}
+    ]
+), (req, res) => {
     res.send('File Upload here');
 })
 
