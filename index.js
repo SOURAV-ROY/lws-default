@@ -126,6 +126,7 @@ app.post(
         },
     ]),
     (req, res, next) => {
+        console.log(req.files);
         res.send("File Upload success");
     }
 );
