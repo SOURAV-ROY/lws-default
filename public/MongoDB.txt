@@ -4,7 +4,7 @@
 4. db.products.find(); --> show Data from DB
 5. db.products.find().pretty(); --> Data View Pretty
 6. db.products.insertMany([{},{}]); --> Many Data Insert
-7. db.products.find({name:'iPhone 12'}).pretty(); --> Fine Specific Data From DB
+7. db.products.find({name:'iPhone 12'}).pretty(); --> Find Specific Data From DB
 8. db.products.find({name:'iPhone 12'},{active:0}).pretty(); ->> hide active field
 9. db.products.find({name:'iPhone 12'},{active:1}).pretty(); ->> only show active
 10. db.products.find({category:'laptop'},{active:0}).pretty().limit(1) --> Limit Define Here
