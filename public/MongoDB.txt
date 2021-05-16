@@ -1,0 +1,16 @@
+1. use ecommerce --> Create ecommerce DB
+2. db -> show use db
+3. db.products.insertOne({name:'iPhone 10',price:100000,category:'smartphone',active: true});
+4. db.products.find(); --> show Data from DB
+5. db.products.find().pretty(); --> Data View Pretty
+6. db.products.insertMany([{},{}]); --> Many Data Insert
+7. db.products.find({name:'iPhone 12'}).pretty(); --> Fine Specific Data From DB
+8. db.products.find({name:'iPhone 12'},{active:0}).pretty(); ->> hide active field
+9. db.products.find({name:'iPhone 12'},{active:1}).pretty(); ->> only show active
+10. db.products.find({category:'laptop'},{active:0}).pretty().limit(1) --> Limit Define Here
+11. db.products.find({category:'laptop'},{active:0}).pretty().limit(1).skip(1) ->> skip first data
+12. db.products.findOne({category:'smartphone'}) -->> give first data  // limit(1)
+13. db.products.updateOne({name:'iPhone 10',active: true},{$set:{price: 150000}}) --> price update { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+14. db.products.updateMany({},{$set:{active:true}}) --> Update Many { "acknowledged" : true, "matchedCount" : 4, "modifiedCount" : 2 }
+15. db.products.deleteOne({name:"iPhone 10"}) --> Delete One Data { "acknowledged" : true, "deletedCount" : 1 }
+16. db.products.deleteMany({category:'laptop'}) --> Delete Many Data { "acknowledged" : true, "deletedCount" : 2 }
