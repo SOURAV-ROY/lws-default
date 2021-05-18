@@ -23,7 +23,13 @@ todoRouter.post('/', async (req, res) => {
 });
 
 todoRouter.post('/all', async (req, res) => {
-    console.log("Get TODOS");
+    await Todo.insertMany(req.body, (err) => {
+        if (!err) {
+            res.status(200).json({message: 'All Todos saved successfully'});
+        } else {
+            res.status(500).json({error: 'There was a severe side error'});
+        }
+    })
 });
 
 todoRouter.put('/:id', async (req, res) => {
