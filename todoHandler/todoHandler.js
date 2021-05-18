@@ -5,17 +5,23 @@ const todoRouter = express.Router();
 
 // Get @All Todo
 todoRouter.get('/', async (req, res) => {
-    Todo.find({status: 'active'}, (err, data) => {
-        if (!err) {
-            res.status(200).json({
-                total: data.length,
-                result: data,
-                message: 'Get All Todos successfully'
-            });
-        } else {
-            res.status(500).json({error: 'There was a severe side error'});
+    Todo.find({status: 'active'}).select({
+        _id: 0,
+        date: 0,
+        __v: 0
+    }).limit(2).exec(
+        (err, data) => {
+            if (!err) {
+                res.status(200).json({
+                    total: data.length,
+                    result: data,
+                    message: 'Get All Todos successfully'
+                });
+            } else {
+                res.status(500).json({error: 'There was a severe side error'});
+            }
         }
-    })
+    );
 });
 
 todoRouter.get('/:id', async (req, res) => {
