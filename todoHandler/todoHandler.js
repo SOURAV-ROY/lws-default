@@ -3,7 +3,7 @@ const Todo = require('../models/TodoModel');
 
 const todoRouter = express.Router();
 
-// Get @All Todo
+// Get @Todo All
 todoRouter.get('/', async (req, res) => {
     Todo.find({status: 'active'}).select({
         date: 0,
@@ -23,6 +23,7 @@ todoRouter.get('/', async (req, res) => {
     );
 });
 
+//Single @Todo GET
 todoRouter.get('/:id', async (req, res) => {
     Todo.find({_id: req.params.id}, (err, data) => {
         if (!err) {
@@ -81,8 +82,17 @@ todoRouter.put('/:id', async (req, res) => {
     console.log(todoUpdate);
 });
 
+// Delete Single @Todo
 todoRouter.delete('/:id', async (req, res) => {
-    console.log("Get TODOS");
+    Todo.deleteOne({_id: req.params.id}, (err) => {
+        if (!err) {
+            res.status(200).json({
+                message: 'Single Todo deleted successfully'
+            });
+        } else {
+            res.status(500).json({error: 'There was a severe side error For Single Data'});
+        }
+    })
 });
 
 module.exports = todoRouter;
