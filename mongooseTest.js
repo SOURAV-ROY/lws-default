@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const todoHandler = require('./todoHandler/todoHandler');
 
 const app = express();
 app.use(express.json());
@@ -13,6 +14,8 @@ mongoose
     .then(() => console.log('MongooseTest Connection established'))
     .catch((error) => console.log(error))
 
+
+app.use('/todo', todoHandler);
 
 function errorHandler(err, req, res, next) {
     if (req.headersSent) {
