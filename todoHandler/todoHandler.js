@@ -6,7 +6,6 @@ const todoRouter = express.Router();
 // Get @All Todo
 todoRouter.get('/', async (req, res) => {
     Todo.find({status: 'active'}).select({
-        _id: 0,
         date: 0,
         __v: 0
     }).limit(2).exec(
@@ -25,7 +24,17 @@ todoRouter.get('/', async (req, res) => {
 });
 
 todoRouter.get('/:id', async (req, res) => {
-
+    Todo.find({_id: req.params.id}, (err, data) => {
+        if (!err) {
+            res.status(200).json({
+                total: data.length,
+                result: data,
+                message: 'Get Single Todo By Id successfully'
+            });
+        } else {
+            res.status(500).json({error: 'There was a severe side error For Single Data'});
+        }
+    })
 });
 
 // Single @Todo POST
