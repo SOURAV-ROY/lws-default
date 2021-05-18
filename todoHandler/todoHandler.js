@@ -36,18 +36,23 @@ todoRouter.post('/all', async (req, res) => {
 
 // Update @Todo
 todoRouter.put('/:id', async (req, res) => {
-    await Todo.updateOne({_id: req.params.id}, {
+    const totoUpdate = await Todo.findByIdAndUpdate({_id: req.params.id}, {
         $set: {
             title: 'Title Update',
-            status: 'inactive'
+            status: 'active'
         }
+    }, {
+        new: true,
+        useFindAndModify: false
     }, (error) => {
         if (!error) {
             res.status(200).json({message: 'Todos Updated successfully'});
         } else {
             res.status(500).json({error: 'There was an error'});
         }
-    })
+    });
+
+    console.log(totoUpdate);
 });
 
 todoRouter.delete('/:id', async (req, res) => {
