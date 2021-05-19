@@ -24,6 +24,17 @@ todoRouter.get('/', (req, res) => {
     );
 });
 
+//GET Active @Todo
+todoRouter.get('/active', async (req, res) => {
+    const activeTodo = new Todo();
+    const data = await activeTodo.findActive();
+
+    res.status(200).json({
+        total: data.length,
+        data
+    })
+});
+
 //Single @Todo GET
 todoRouter.get('/:id', async (req, res) => {
 
@@ -45,6 +56,7 @@ todoRouter.get('/:id', async (req, res) => {
 // Single @Todo POST
 todoRouter.post('/', async (req, res) => {
     const newTodo = new Todo(req.body);
+    // save() is a instance method ******************88
     await newTodo.save((err) => {
         if (!err) {
             res.status(200).json({message: 'Todo saved successfully'});

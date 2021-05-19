@@ -18,4 +18,11 @@ const TodoSchema = new mongoose.Schema({
     }
 }, {collection: 'TodoSchemas'});
 
+
+TodoSchema.methods = {
+    findActive: () => {
+        return mongoose.model("TodoSchema").find({status: 'active'});
+    }
+}
+
 module.exports = mongoose.model('TodoSchema', TodoSchema);
