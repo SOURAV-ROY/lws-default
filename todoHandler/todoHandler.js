@@ -35,6 +35,18 @@ todoRouter.get('/active', async (req, res) => {
     })
 });
 
+// Find Active with Callback
+todoRouter.get('/active-callback', (req, res) => {
+    const inactiveTodo = new Todo();
+
+    inactiveTodo.findActiveCallback((error, data) => {
+        res.status(200).json({
+            total: data.length,
+            data
+        })
+    });
+});
+
 //Single @Todo GET
 todoRouter.get('/:id', async (req, res) => {
 

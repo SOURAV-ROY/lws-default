@@ -22,6 +22,10 @@ const TodoSchema = new mongoose.Schema({
 TodoSchema.methods = {
     findActive: () => {
         return mongoose.model("TodoSchema").find({status: 'active'});
+    },
+
+    findActiveCallback: (callback) => {
+        return mongoose.model("TodoSchema").find({status: 'inactive'}, callback);
     }
 }
 
