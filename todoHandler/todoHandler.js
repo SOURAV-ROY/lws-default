@@ -57,6 +57,16 @@ todoRouter.get('/js', async (req, res) => {
     })
 });
 
+//GET @Todo By Language
+todoRouter.get('/language', async (req, res) => {
+    const data = await Todo.find().byLanguage('node');
+
+    res.status(200).json({
+        total: data.length,
+        data
+    })
+});
+
 //Single @Todo GET
 todoRouter.get('/:id', async (req, res) => {
 

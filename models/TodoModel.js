@@ -31,8 +31,18 @@ TodoSchema.methods = {
 
 // Static Method **********************************************************
 TodoSchema.statics = {
+    // Arrow function can not access $this keyword *********************
     findByJS: function () {
         return this.find({title: /js/i});
+    }
+}
+
+// Query Helpers **********************************************************
+TodoSchema.query = {
+    // Arrow function can not access $this keyword *********************
+    byLanguage: function (language) {
+        // Use RegExp **********************************************
+        return this.find({title: RegExp(language, 'i')});
     }
 }
 
