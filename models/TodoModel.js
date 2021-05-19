@@ -18,7 +18,7 @@ const TodoSchema = new mongoose.Schema({
     }
 }, {collection: 'TodoSchemas'});
 
-
+// Instance Method **********************************************************
 TodoSchema.methods = {
     findActive: () => {
         return mongoose.model("TodoSchema").find({status: 'active'});
@@ -26,6 +26,13 @@ TodoSchema.methods = {
 
     findActiveCallback: (callback) => {
         return mongoose.model("TodoSchema").find({status: 'inactive'}, callback);
+    }
+};
+
+// Static Method **********************************************************
+TodoSchema.statics = {
+    findByJS: function () {
+        return this.find({title: /js/i});
     }
 }
 

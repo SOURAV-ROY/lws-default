@@ -47,6 +47,16 @@ todoRouter.get('/active-callback', (req, res) => {
     });
 });
 
+//GET JS From @Todo Using Static Method
+todoRouter.get('/js', async (req, res) => {
+    const data = await Todo.findByJS();
+
+    res.status(200).json({
+        total: data.length,
+        data
+    })
+});
+
 //Single @Todo GET
 todoRouter.get('/:id', async (req, res) => {
 
