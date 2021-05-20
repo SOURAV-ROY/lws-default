@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const todoHandler = require('./todoHandler/todoHandler');
+const todoHandler = require('./controllers/todoHandler');
+const userHandler = require('./controllers/userHandler');
 
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ mongoose
 
 
 app.use('/todo', todoHandler);
+app.use('/user', userHandler);
 
 function errorHandler(err, req, res, next) {
     if (req.headersSent) {
