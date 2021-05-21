@@ -1,10 +1,14 @@
 const express = require('express');
 const Todo = require('../models/TodoModel');
+const checkLogin = require('../middlewares/checkLogin');
 
 const todoRouter = express.Router();
 
 // Get @Todo All
-todoRouter.get('/', (req, res) => {
+todoRouter.get('/', checkLogin, (req, res) => {
+    console.log(req.name);
+    console.log(req.username);
+    console.log(req.userId);
 
     Todo.find({status: 'active'}).select({
         date: 0,
