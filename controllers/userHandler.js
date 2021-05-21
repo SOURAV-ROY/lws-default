@@ -42,6 +42,7 @@ userRouter.post('/login', async (req, res) => {
             if (isValidPassword) {
                 // Generate JWT Token And Login
                 const token = jwt.sign({
+                    name: findUser[0].name,
                     username: findUser[0].username,
                     userId: findUser[0]._id
                 }, process.env.JWT_SECRET, {
