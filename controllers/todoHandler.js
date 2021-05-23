@@ -1,5 +1,6 @@
 const express = require('express');
 const Todo = require('../models/TodoModel');
+const User = require('../models/UserModel');
 const checkLogin = require('../middlewares/checkLogin');
 
 const todoRouter = express.Router();
@@ -119,7 +120,18 @@ todoRouter.post('/', checkLogin, async (req, res) => {
 
     try {
         // save() is a instance method ********************
-        await newTodo.save();
+        const todo = await newTodo.save();
+
+        await User.updateOne(
+            {
+                _id: req.userId
+            }, {
+                $push: {
+                    todos: todo._id
+                }
+            }
+        );
+
         res.status(200).json(
             {message: 'Todo saved successfully'}
         );

@@ -20,7 +20,13 @@ const UserSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now()
-    }
+    },
+    todos: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'TodoSchema'
+        }
+    ]
 }, {collection: 'Users'});
 
 module.exports = mongoose.model('User', UserSchema);
