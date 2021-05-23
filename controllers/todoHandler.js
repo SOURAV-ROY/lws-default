@@ -10,22 +10,26 @@ todoRouter.get('/', checkLogin, (req, res) => {
     console.log(req.username);
     console.log(req.userId);
 
-    Todo.find({status: 'active'}).select({
-        date: 0,
-        __v: 0
-    }).limit(10).exec(
-        (err, data) => {
-            if (!err) {
-                res.status(200).json({
-                    total: data.length,
-                    result: data,
-                    message: 'Get All Todos successfully'
-                });
-            } else {
-                res.status(500).json({error: 'There was a severe side error'});
+    Todo.find({status: 'active'})
+        .select({
+            date: 0,
+            __v: 0
+        })
+        .populate('user', 'name username -_id')
+        .limit(10)
+        .exec(
+            (err, data) => {
+                if (!err) {
+                    res.status(200).json({
+                        total: data.length,
+                        result: data,
+                        message: 'Get All Todos successfully'
+                    });
+                } else {
+                    res.status(500).json({error: 'There was a severe side error'});
+                }
             }
-        }
-    );
+        );
 });
 
 //GET Active @Todo
