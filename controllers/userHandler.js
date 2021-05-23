@@ -71,4 +71,28 @@ userRouter.post('/login', async (req, res) => {
     }
 });
 
+// GET All Users
+userRouter.get('/all', async (req, res) => {
+
+    try {
+        const users = await User.find(
+            {status: 'active'}
+        ).populate('todos', 'title description status user date -_id');
+
+        res.status(200).json(
+            {
+                total: users.length,
+                data: users,
+                message: 'Get All Users Successfully'
+            }
+        );
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(
+            {error: 'Users Get Failed'}
+        );
+    }
+
+});
+
 module.exports = userRouter;

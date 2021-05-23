@@ -15,12 +15,19 @@ const UserSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'inactive']
+        enum: ['active', 'inactive'],
+        default: 'active'
     },
     date: {
         type: Date,
         default: Date.now()
-    }
+    },
+    todos: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'TodoSchema'
+        }
+    ]
 }, {collection: 'Users'});
 
 module.exports = mongoose.model('User', UserSchema);

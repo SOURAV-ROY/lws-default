@@ -1,5 +1,6 @@
 const express = require('express');
 const Todo = require('../models/TodoModel');
+const User = require('../models/UserModel');
 const checkLogin = require('../middlewares/checkLogin');
 
 const todoRouter = express.Router();
@@ -10,22 +11,26 @@ todoRouter.get('/', checkLogin, (req, res) => {
     console.log(req.username);
     console.log(req.userId);
 
-    Todo.find({status: 'active'}).select({
-        date: 0,
-        __v: 0
-    }).limit(10).exec(
-        (err, data) => {
-            if (!err) {
-                res.status(200).json({
-                    total: data.length,
-                    result: data,
-                    message: 'Get All Todos successfully'
-                });
-            } else {
-                res.status(500).json({error: 'There was a severe side error'});
+    Todo.find({status: 'active'})
+        .select({
+            date: 0,
+            __v: 0
+        })
+        .populate('user', 'name username -_id')
+        .limit(10)
+        .exec(
+            (err, data) => {
+                if (!err) {
+                    res.status(200).json({
+                        total: data.length,
+                        result: data,
+                        message: 'Get All Todos successfully'
+                    });
+                } else {
+                    res.status(500).json({error: 'There was a severe side error'});
+                }
             }
-        }
-    );
+        );
 });
 
 //GET Active @Todo
@@ -89,10 +94,11 @@ todoRouter.get('/:id', async (req, res) => {
     }
 });
 
-// Single @Todo POST
-todoRouter.post('/', async (req, res) => {
+/**************************************************************************
+ // Single @Todo POST
+ todoRouter.post('/', checkLogin, async (req, res) => {
     const newTodo = new Todo(req.body);
-    // save() is a instance method ******************88
+    // save() is a instance method ********************
     await newTodo.save((err) => {
         if (!err) {
             res.status(200).json({message: 'Todo saved successfully'});
@@ -100,6 +106,41 @@ todoRouter.post('/', async (req, res) => {
             res.status(500).json({error: 'There was a severe side error'});
         }
     })
+});
+ ****************************************************************************/
+
+// Single @Todo POST
+todoRouter.post('/', checkLogin, async (req, res) => {
+    const newTodo = new Todo(
+        {
+            ...req.body,
+            user: req.userId
+        }
+    );
+
+    try {
+        // save() is a instance method ********************
+        const todo = await newTodo.save();
+
+        await User.updateOne(
+            {
+                _id: req.userId
+            }, {
+                $push: {
+                    todos: todo._id
+                }
+            }
+        );
+
+        res.status(200).json(
+            {message: 'Todo saved successfully'}
+        );
+    } catch (errors) {
+        console.log(errors);
+        res.status(500).json(
+            {error: 'There was a severe side error'}
+        );
+    }
 });
 
 // Many @Todo POST
