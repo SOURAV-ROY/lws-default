@@ -30,7 +30,6 @@ const errorHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
-
 app.listen(2022, () => {
     console.log(`MongooseTest Server Listening on 2022`);
 });
