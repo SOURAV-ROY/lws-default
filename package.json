@@ -22,7 +22,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^8.9.5",
-    "multer": "^2.0.0"
+    "multer": "^2.0.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
