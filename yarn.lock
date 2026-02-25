@@ -632,8 +632,8 @@ mime@1.6.0:
   resolved "https://registry.npmjs.org/mime/-/mime-1.6.0.tgz"
 
 minimatch@^3.0.4, minimatch@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.4.tgz#89d910ea3970a77ac8edfd30340ccd038b758079"
   dependencies:
     brace-expansion "^1.1.7"
 
